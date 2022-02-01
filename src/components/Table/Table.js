@@ -32,49 +32,69 @@ class Table extends React.Component{
     clearForm = () => {
         document.getElementById('delete').reset();
     }
-    userAuthenticated = () => {
+    // userAuthenticated = () => {
+	// 	fetch('https://stark-stream-43344.herokuapp.com/isUserAuth', {
+	// 		method: 'GET',
+	// 		headers: {'x-access-token': localStorage.getItem('token')},
+	// 	})
+	// 		.then(response => response.json())
+	// 		.then(response => {
+	// 			console.log(response)
+	// 			return true;
+	// 		})
+    //         .catch(e => console.log(e))
+    //     return false; 
+	// }
+
+    Delete = () => {
+        let valid = false;
 		fetch('https://stark-stream-43344.herokuapp.com/isUserAuth', {
-			method: 'POST',
+			method: 'GET',
 			headers: {'x-access-token': localStorage.getItem('token')},
 		})
 			.then(response => response.json())
 			.then(response => {
-				console.log(response)
-				return true;
-			})
-            .catch(e => console.log(e))
-        return false; 
-	}
-
-    Delete = () => {
-        if (this.userAuthenticated){
-		fetch('https://stark-stream-43344.herokuapp.com/deldata', {
-			method: 'DELETE',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify({
-				id: this.state.id,
-			})
-		})
-            .then(response => response.json())
-            .then(user => {alert(user + ": Click Refresh Button to fetch updated database");})
-            .catch(e => {console.log(e);})
+				//console.log("userAuthenticated worked lol")
+				if(response.auth){
+					valid = true;
+                fetch('https://stark-stream-43344.herokuapp.com/deldata', {
+                    method: 'DELETE',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        id: this.state.id,
+                    })
+                })
+                    .then(response => response.json())
+                    .then(user => {alert(user + ": Click Refresh Button to fetch updated database");})
+                    .catch(e => {console.log(e);})
+                } else {
+                    alert("session expired please login again!");
+                }
+            })
         this.clearForm();
-        } else {
-			alert("session expired please login again!");
-		}
     }
 
     Refresh = () => {
-        if (this.userAuthenticated){
-        fetch('https://stark-stream-43344.herokuapp.com/data')
-        .then(response => response.json())
-        .then(data =>{
-            this.setState({tablelist2: data}) 
-            //console.log('refresh',data)
-        })
-        } else {
-			alert("session expired please login again!");
-		}
+        let valid = false;
+		fetch('https://stark-stream-43344.herokuapp.com/isUserAuth', {
+			method: 'GET',
+			headers: {'x-access-token': localStorage.getItem('token')},
+		})
+			.then(response => response.json())
+			.then(response => {
+				//console.log("userAuthenticated worked lol")
+				if(response.auth){
+					valid = true;
+                    fetch('https://stark-stream-43344.herokuapp.com/data')
+                    .then(response => response.json())
+                    .then(data =>{
+                        this.setState({tablelist2: data}) 
+                        //console.log('refresh',data)
+                    })
+                } else {
+                    alert("session expired please login again!");
+                }
+            })
     }
 
     render(){

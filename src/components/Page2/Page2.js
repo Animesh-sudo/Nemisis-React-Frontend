@@ -101,46 +101,62 @@ class Page2 extends React.Component{
         }
     }
 
-	userAuthenticated = () => {
+	// userAuthenticated = () => {
+	// 	let valid = false;
+	// 	fetch('http://localhost:4000/isUserAuth', {
+	// 		method: 'GET',
+	// 		headers: {'x-access-token': localStorage.getItem('token')},
+	// 	})
+	// 		.then(response => response.json())
+	// 		.then(response => {
+	// 			console.log("userAuthenticated worked lol")
+	// 			if(response.auth){
+	// 				valid = true;
+	// 			}
+	// 		})
+	// 		.catch(e => console.log(e))
+	// 	return valid;   	
+	// }
+
+	onSubmit = () => {
+		//console.log(localStorage.getItem('token'));
+		let valid = false;
 		fetch('https://stark-stream-43344.herokuapp.com/isUserAuth', {
-			method: 'POST',
+			method: 'GET',
 			headers: {'x-access-token': localStorage.getItem('token')},
 		})
 			.then(response => response.json())
 			.then(response => {
-				console.log(response)
-				return true;
+				//console.log("userAuthenticated worked lol")
+				if(response.auth){
+					valid = true;
+					fetch('https://stark-stream-43344.herokuapp.com/register', {
+						method: 'POST',
+						headers: {'Content-Type': 'application/json'},
+						body: JSON.stringify({
+							name: this.state.name,
+							email: this.state.email,
+							mobile: this.state.mobile,
+							address: this.state.address
+						})
+					})
+						.then(response => response.json())
+						.then(user => {
+								console.log(user);
+								alert("User added successfully")
+						})
+						.catch(e => {console.log(e)})
+				} else {
+					alert("session expired please login again!");
+				}
 			})
-			.catch(e => console.log(e))
-		return false;   	
-	}
-
-	onSubmit = () => {
-		console.log("Hello");
-		if (this.userAuthenticated){
-		fetch('https://stark-stream-43344.herokuapp.com/register', {
-			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
-			body: JSON.stringify({
-				name: this.state.name,
-				email: this.state.email,
-				mobile: this.state.mobile,
-                address: this.state.address
-			})
-		})
-			.then(response => response.json())
-			.then(user => {
-					console.log(user);
-                    alert("User added successfully")
-			})
-            .catch(e => {console.log(e)})
+	
 
         this.clearForm();
 		}
-		else {
-			alert("session expired please login again!");
-		}
-	}
+		// else {
+		// 	alert("session expired please login again!");
+		// }
 	render(){
 		const { onRouteChange } = this.props;
         const {errors} = this.state;
