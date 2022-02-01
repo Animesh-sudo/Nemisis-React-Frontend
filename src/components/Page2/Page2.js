@@ -30,7 +30,7 @@ class Page2 extends React.Component{
 		}
 	}
     componentDidMount(){
-        fetch('http://localhost:4000/data')
+        fetch('https://stark-stream-43344.herokuapp.com/data')
         .then(response => response.json())
         .then(data =>{
             this.setState({tablelist: data}) 
@@ -102,7 +102,7 @@ class Page2 extends React.Component{
     }
 
 	userAuthenticated = () => {
-		fetch('http://localhost:4000/isUserAuth', {
+		fetch('https://stark-stream-43344.herokuapp.com/isUserAuth', {
 			method: 'POST',
 			headers: {'x-access-token': localStorage.getItem('token')},
 		})
@@ -118,7 +118,7 @@ class Page2 extends React.Component{
 	onSubmit = () => {
 		console.log("Hello");
 		if (this.userAuthenticated){
-		fetch('http://localhost:4000/register', {
+		fetch('https://stark-stream-43344.herokuapp.com/register', {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({

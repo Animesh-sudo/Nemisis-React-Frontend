@@ -10,14 +10,6 @@ class Table extends React.Component{
         }
     }
 
-    // componentDidMount(){
-    //     fetch('http://localhost:4000/data')
-    //     .then(response => response.json())
-    //     .then(data =>{
-    //         this.setState({tablelist2: data}) 
-    //         console.log(data)
-    //     })
-    // }
 
     renderTableData(){
         return this.state.tablelist2.map((user, index) => {
@@ -41,7 +33,7 @@ class Table extends React.Component{
         document.getElementById('delete').reset();
     }
     userAuthenticated = () => {
-		fetch('http://localhost:4000/isUserAuth', {
+		fetch('https://stark-stream-43344.herokuapp.com/isUserAuth', {
 			method: 'POST',
 			headers: {'x-access-token': localStorage.getItem('token')},
 		})
@@ -56,7 +48,7 @@ class Table extends React.Component{
 
     Delete = () => {
         if (this.userAuthenticated){
-		fetch('http://localhost:4000/deldata', {
+		fetch('https://stark-stream-43344.herokuapp.com/deldata', {
 			method: 'DELETE',
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({
@@ -74,7 +66,7 @@ class Table extends React.Component{
 
     Refresh = () => {
         if (this.userAuthenticated){
-        fetch('http://localhost:4000/data')
+        fetch('https://stark-stream-43344.herokuapp.com/data')
         .then(response => response.json())
         .then(data =>{
             this.setState({tablelist2: data}) 
